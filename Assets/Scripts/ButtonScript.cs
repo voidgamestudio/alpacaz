@@ -5,11 +5,14 @@ public class ButtonScript : MonoBehaviour
 {
 
     public GameObject Unit;
-    public GameControllerScript gc;
+    public GameControllerScript GameController;
+    public float Cooldown = 1f;
 
     #region Private attributes
 
     private int buttonSize = 64;
+    private float currentCooldown = 0;
+    private bool onCooldown = false;
 
     #endregion
 
@@ -19,15 +22,39 @@ public class ButtonScript : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
-
+        if (onCooldown)
+        {
+            currentCooldown -= Time.deltaTime;
+            renderer.material.SetFloat("_Cutoff", currentCooldown / Cooldown);
+            if (currentCooldown <= 0)
+            {
+                StopCooldown();
+            }
+        }
     }
 
     void OnMouseDown()
     {
         Debug.Log("Clicado!");
-        gc.CreateUnit(Unit);
+        if (!onCooldown)
+        {
+            GameController.CreateUnit(Unit);
+            Debug.Log("Ação realizada");
+            StartCooldown();
+        }
+    }
+
+    private void StartCooldown()
+    {
+        onCooldown = true;
+        currentCooldown = Cooldown;
+    }
+
+    private void StopCooldown()
+    {
+        onCooldown = false;
+        currentCooldown = 0;
     }
 }

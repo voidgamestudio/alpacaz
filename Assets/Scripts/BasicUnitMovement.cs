@@ -6,7 +6,7 @@ public class BasicUnitMovement : MonoBehaviour
 	#region Public parameters
 	
 	public float speed = 10f;
-	public Vector2 direction;
+    public Vector2 direction;
 	
 	#endregion
 	

@@ -18,7 +18,11 @@ public class BasicUnitMovement : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
+		applyMovement();
+	}
+
+	public void applyMovement()
+	{
 		rigidbody2D.velocity = direction.normalized * speed;
 	}
-	
 }

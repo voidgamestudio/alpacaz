@@ -23,7 +23,7 @@ public class UnitController : MonoBehaviour {
 
 	void CauseDamage(GameObject target) {
 		float damage = Random.Range (0.0F, 10.0F);
-		UnitController targetController = (UnitController) currentTarget.GetComponent<UnitController>();
+		UnitController targetController = (UnitController) target.GetComponent<UnitController>();
 		targetController.hp -= damage;
 		Debug.Log (targetTag + " received a damage of " + damage + ". Current HP: " + targetController.hp);
 	}
@@ -31,21 +31,29 @@ public class UnitController : MonoBehaviour {
 	void CheckDeath(GameObject target) {
 		UnitController targetController = (UnitController) target.GetComponent<UnitController>();
 		if (targetController.hp <= 0.0F) {
-			Destroy(target);
+			ChangeStateToWalking();
+			CleanAndDestroyTarget(target);
 		}
+	}
+
+	void CleanAndDestroyTarget(GameObject target) {
+		Destroy(target);
+		currentTarget = null;
+	}
+
+	void ChangeStateToWalking() {
+		state = UnitState.Walking;
+		BasicUnitMovement basicUnitMovement = (BasicUnitMovement) this.GetComponent<BasicUnitMovement>();
+		basicUnitMovement.applyMovement();
 	}
 
 	void OnCollisionEnter2D(Collision2D collisionInfo)
 	{
 		if (collisionInfo.collider.gameObject.tag == targetTag) {
-			Debug.Log("Oi " + targetTag);
-			rigidbody2D.velocity = Vector3.zero;
-			collisionInfo.collider.gameObject.rigidbody2D.velocity = Vector3.zero;
 			state = UnitState.Attacking;
 			currentTarget = collisionInfo.collider.gameObject;
 		}
 	}
-
 }
 
 public enum UnitState {

@@ -27,12 +27,22 @@ public class ButtonScript : MonoBehaviour
         if (onCooldown)
         {
             currentCooldown -= Time.deltaTime;
-            renderer.material.SetFloat("_Cutoff", currentCooldown / Cooldown);
+            Transform cooldownForeground = transform.GetChild(0);
+            Vector3 currentScale = cooldownForeground.transform.localScale;
+            setMaterialAlpha(cooldownForeground.GetChild(0), 0.5f);
+            cooldownForeground.transform.localScale = new Vector3(currentScale.x, currentCooldown / Cooldown, currentScale.z);
             if (currentCooldown <= 0)
             {
                 StopCooldown();
             }
         }
+    }
+
+    private static void setMaterialAlpha(Transform transf, float val)
+    {
+        Color c = transf.renderer.material.color;
+        c.a = val;
+        transf.renderer.material.color = c;
     }
 
     void OnMouseDown()

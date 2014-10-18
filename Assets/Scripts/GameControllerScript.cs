@@ -9,7 +9,7 @@ public class GameControllerScript : MonoBehaviour
     
     #region private attributes
 
-    private float offset = 0.1f;
+    private float offset = 0.05f;
 
     #endregion
 

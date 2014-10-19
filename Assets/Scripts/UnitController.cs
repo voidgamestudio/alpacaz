@@ -2,16 +2,36 @@
 using System.Collections;
 
 public class UnitController : MonoBehaviour {
+    
+    #region Public Attributes
 
-	public string targetTag;
-	public float hp = 100;
-	private UnitState state;
-	private GameObject currentTarget;
+    public float hp = 100;
+
+    #endregion
+
+    
+    #region Private attributes
+
+    private string targetTag;
+    private UnitState state;
+    private GameObject currentTarget;
+
+    #endregion
+
+
 
 	// Use this for initialization
 	void Start () {
 	
 	}
+
+    public void initialize(Vector2 direction, string myTag, string targetTag)
+    {
+        BasicUnitMovement unitMovement = gameObject.GetComponent<BasicUnitMovement>();
+        unitMovement.setDirection(direction);
+        this.targetTag = targetTag;
+        gameObject.tag = myTag;
+    }
 	
 	// Update is called once per frame
 	void FixedUpdate () {

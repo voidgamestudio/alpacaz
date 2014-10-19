@@ -5,7 +5,7 @@ public class ButtonScript : MonoBehaviour
 {
 
     public GameObject Unit;
-    public GameControllerScript GameController;
+    public PlayerScript GameController;
     public float Cooldown = 1f;
 
     #region Private attributes
@@ -13,13 +13,15 @@ public class ButtonScript : MonoBehaviour
     private int buttonSize = 64;
     private float currentCooldown = 0;
     private bool onCooldown = false;
+    private Transform cooldownForeground;
 
     #endregion
 
     // Use this for initialization
     void Start()
     {
-
+        cooldownForeground = transform.GetChild(0);
+        setMaterialAlpha(cooldownForeground.GetChild(0), 0.5f);
     }
 
     void Update()
@@ -27,9 +29,7 @@ public class ButtonScript : MonoBehaviour
         if (onCooldown)
         {
             currentCooldown -= Time.deltaTime;
-            Transform cooldownForeground = transform.GetChild(0);
             Vector3 currentScale = cooldownForeground.transform.localScale;
-            setMaterialAlpha(cooldownForeground.GetChild(0), 0.5f);
             cooldownForeground.transform.localScale = new Vector3(currentScale.x, currentCooldown / Cooldown, currentScale.z);
             if (currentCooldown <= 0)
             {
@@ -47,11 +47,9 @@ public class ButtonScript : MonoBehaviour
 
     void OnMouseDown()
     {
-        Debug.Log("Clicado!");
         if (!onCooldown)
         {
             GameController.CreateUnit(Unit);
-            Debug.Log("Ação realizada");
             StartCooldown();
         }
     }

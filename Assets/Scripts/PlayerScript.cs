@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameControllerScript : MonoBehaviour
+public class PlayerScript : MonoBehaviour
 {
 
     public GameObject playerBase;
-
+    public Vector2 playerDirection;
+    public string myTag;
+    public string targetTag;
     
     #region private attributes
 
@@ -30,6 +32,8 @@ public class GameControllerScript : MonoBehaviour
         Vector3 baseSize = playerBase.renderer.bounds.size;
         Vector3 unitInitialPosition = playerBase.transform.position + new Vector3(baseSize.x + offset, baseSize.y);
         Debug.Log(unitInitialPosition);
-        Instantiate(unit, unitInitialPosition, Quaternion.identity);
+        GameObject gameUnit = (GameObject) Instantiate(unit, unitInitialPosition, Quaternion.identity);
+        UnitController unitController = gameUnit.GetComponent<UnitController>();
+        unitController.initialize(playerDirection, myTag, targetTag);
     }
 }

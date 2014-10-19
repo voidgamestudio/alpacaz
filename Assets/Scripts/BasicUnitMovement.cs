@@ -6,23 +6,29 @@ public class BasicUnitMovement : MonoBehaviour
 	#region Public parameters
 	
 	public float speed = 10f;
-    public Vector2 direction;
+
 	
 	#endregion
 	
 	#region Private attributes
 	
-	#endregion
+    private Vector2 direction;
+	
+    #endregion
 	
 	
 	// Use this for initialization
 	void Start()
 	{
-		applyMovement();
 	}
 
 	public void applyMovement()
 	{
 		rigidbody2D.velocity = direction.normalized * speed;
 	}
+
+    public void setDirection(Vector2 direction) {
+        this.direction = direction;
+        applyMovement();
+    }
 }

@@ -8,6 +8,8 @@ public class PlayerScript : MonoBehaviour
     public Vector2 playerDirection;
     public string myTag;
     public string targetTag;
+	public float resource;
+	public float deltaResource = 10;
     
     #region private attributes
 
@@ -24,7 +26,11 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+		// 
+		resource += Time.deltaTime * deltaResource;
+		GUIText txt = GameObject.Find("resourceText").guiText;
+		txt.text = ((int)resource).ToString();
+		Debug.Log (resource);
     }
 
     public void CreateUnit(GameObject unit)

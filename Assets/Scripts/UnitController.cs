@@ -5,7 +5,7 @@ public class UnitController : MonoBehaviour {
     
     #region Public Attributes
 
-    public float hp = 100;
+    public Attackable attackableBehavior;
 
     #endregion
 
@@ -22,7 +22,7 @@ public class UnitController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+        attackableBehavior = (Attackable) this.GetComponent<Attackable>();
 	}
 
     public void initialize(Vector2 direction, string myTag, string targetTag)
@@ -36,30 +36,29 @@ public class UnitController : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (state == UnitState.Attacking) {
-			CauseDamage(currentTarget);
-			CheckDeath(currentTarget);
+			this.attackableBehavior.CauseDamage(currentTarget);
+            Attackable targetAttackable = (Attackable) currentTarget.GetComponent<Attackable>();
+
+            if (targetAttackable.CheckDeath())
+            {
+                ChangeStateToWalking();
+                CleanAndDestroyTarget(currentTarget);
+            }
+
 		}
 	}
 
-	void CauseDamage(GameObject target) {
-		float damage = Random.Range (0.0F, 10.0F);
-		UnitController targetController = (UnitController) target.GetComponent<UnitController>();
-		targetController.hp -= damage;
-		Debug.Log (targetTag + " received a damage of " + damage + ". Current HP: " + targetController.hp);
-	}
+    public void CleanAndDestroyTarget(GameObject target)
+    {
+        Destroy(target);
+        currentTarget = null;
+    }
 
-	void CheckDeath(GameObject target) {
-		UnitController targetController = (UnitController) target.GetComponent<UnitController>();
-		if (targetController.hp <= 0.0F) {
-			ChangeStateToWalking();
-			CleanAndDestroyTarget(target);
-		}
-	}
-
-	void CleanAndDestroyTarget(GameObject target) {
-		Destroy(target);
-		currentTarget = null;
-	}
+    public bool checkDeath()
+    {
+        return this.attackableBehavior.CheckDeath();
+    }
+	
 
 	void ChangeStateToWalking() {
 		state = UnitState.Walking;
@@ -74,6 +73,11 @@ public class UnitController : MonoBehaviour {
 			currentTarget = collisionInfo.collider.gameObject;
 		}
 	}
+
+    public void subtractHp(float damage)
+    {
+        this.attackableBehavior.subtractHp(damage);
+    }
 }
 
 public enum UnitState {

@@ -30,13 +30,13 @@ public class PlayerScript : MonoBehaviour
 		resource += Time.deltaTime * deltaResource;
 		GUIText txt = GameObject.Find("resourceText").guiText;
 		txt.text = ((int)resource).ToString();
-		Debug.Log (resource);
     }
 
     public void CreateUnit(GameObject unit)
     {
         Vector3 baseSize = playerBase.renderer.bounds.size;
-        Vector3 unitInitialPosition = playerBase.transform.position + new Vector3(baseSize.x + offset, baseSize.y);
+        Vector3 unitSize = unit.renderer.bounds.size;
+        Vector3 unitInitialPosition = playerBase.transform.position + new Vector3(playerDirection.x * (baseSize.x + offset), -baseSize.y/2 + unitSize.y/2);
         Debug.Log(unitInitialPosition);
         GameObject gameUnit = (GameObject) Instantiate(unit, unitInitialPosition, Quaternion.identity);
         UnitController unitController = gameUnit.GetComponent<UnitController>();
